@@ -27,6 +27,7 @@ public class FacadeBlock extends WireHarnessBlock {
     }
 
     @Override
+    @ParametersAreNonnullByDefault
     public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {
         return new FacadeBlockEntity(pPos, pState);
     }

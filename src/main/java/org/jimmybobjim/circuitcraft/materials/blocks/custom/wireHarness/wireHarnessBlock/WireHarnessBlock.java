@@ -1,7 +1,6 @@
 package org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.wireHarnessBlock;
 
 import net.minecraft.core.BlockPos;
-import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
@@ -24,7 +23,6 @@ import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlockEntities;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.base.XYZRotatableBlockEntity;
-import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.WireHarnessConnectable;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.WireHarnessHoldable;
 import org.jimmybobjim.circuitcraft.util.ShapeHelper;
 
@@ -33,7 +31,7 @@ import java.util.List;
 
 import static org.jimmybobjim.circuitcraft.util.Util.v3;
 
-public class WireHarnessBlock extends XYZRotatableBlockEntity implements WireHarnessConnectable {
+public class WireHarnessBlock extends XYZRotatableBlockEntity {
     public static final ModelProperty<List<WireHarnessHoldable.WireData>> WIRE_DATA = new ModelProperty<>();
     public static final ModelProperty<BlockState> FACADE_BLOCK_ID = new ModelProperty<>();
     public static final ModelProperty<Boolean> IS_FACADE_BLOCK_SOLID = new ModelProperty<>();
@@ -98,19 +96,6 @@ public class WireHarnessBlock extends XYZRotatableBlockEntity implements WireHar
         shape.rotateAll(pState.getValue(X_ROT), pState.getValue(Y_ROT), pState.getValue(Z_ROT));
 
         return shape.getShapes();
-    }
-
-    @Override
-    public Direction[] getConnections(BlockState pState) {
-//        Direction toReturn = switch (pState.getValue(ATTACHED_FACE)) {
-//
-//        };
-
-
-
-        return new Direction[]{
-                Direction.WEST
-        };
     }
 
     /**block entity stuff below

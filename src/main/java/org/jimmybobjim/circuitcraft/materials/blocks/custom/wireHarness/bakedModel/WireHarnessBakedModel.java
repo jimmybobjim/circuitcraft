@@ -153,8 +153,8 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
         StringBuilder wireDataString = new StringBuilder("[");
         for (int i = 0; i < 16; i++) {
-//            WireHarnessHoldable.WireData wireData = wireHarnessData.wireDatas.get(i);
-            WireHarnessHoldable.WireData wireData = ((WireHarnessHoldable) CCItems.WIRE_COPPER_RED_X1.get()).getWireData(i);
+            WireHarnessHoldable.WireData wireData = wireHarnessData.wireDatas.get(i);
+//            WireHarnessHoldable.WireData wireData = ((WireHarnessHoldable) CCItems.WIRE_COPPER_RED_X1.get()).getWireData(i);
 
             double width = wireData.width().getWidth();
 

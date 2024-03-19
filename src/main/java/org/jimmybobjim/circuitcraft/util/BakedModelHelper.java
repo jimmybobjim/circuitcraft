@@ -136,6 +136,8 @@ public class BakedModelHelper {
     public void add(BakedModelHelper helper) {
         QuadData quadData = helper.getQuadData();
 
+        num+= quadData.num();
+
         for (int i = 0; i < quadData.num(); i++) {
             v1s.add(quadData.v1s().get(i));
             v2s.add(quadData.v2s().get(i));

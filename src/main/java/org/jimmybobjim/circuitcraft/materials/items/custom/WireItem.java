@@ -6,6 +6,7 @@ import net.minecraft.world.item.Item;
 import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.phys.Vec3;
 import org.jetbrains.annotations.Nullable;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.enumProperties.WireWidth;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.WireHarnessHoldable;
@@ -44,17 +45,34 @@ public class WireItem extends Item implements WireHarnessHoldable {
 
     @Override
     public BakedModelHelper getWireTexture(int pos) {
-        TextureAtlasSprite top = BakedModelHelper.getTexture("block/wire_harness_block/base/top");
+        TextureAtlasSprite
+                wireInsulationSide = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_insulation_side"),
+                wireInsulationFront = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_insulation_front"),
+                wireMetalFront = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_metal_front");
 
         int width = getWidth().getWidth();
 
         BakedModelHelper helper = new BakedModelHelper();
 
-        helper.cube(
-                v3(((double) width/4)+pos, 0.5, 0),
-                v3(((double) width*0.75)+pos, ((double) width/2)+0.5, 16),
-                wireInsulationColor, top
-        );
+        Vec3
+                pos1 = v3(((double) width/4)+pos, 0.5, 0),
+                pos2 = v3(((double) width*0.75)+pos, ((double) width/2)+0.5, 16);
+
+        helper.cube(pos1, pos2, wireInsulationColor, BakedModelHelper.cubeSprite(
+                wireInsulationSide,
+                wireInsulationSide,
+                wireInsulationFront,
+                wireInsulationFront,
+                wireInsulationSide,
+                wireInsulationSide
+        ));
+
+        double
+                x1 = pos1.x, y1 = pos1.y, z1 = pos1.z,
+                x2 = pos2.x, y2 = pos2.y, z2 = pos2.z;
+
+        helper.quad(v3(x1,y2,z1), v3(x2,y2,z1), v3(x2,y1,z1), v3(x1,y1,z1), wireMetal.color(), wireMetalFront);
+        helper.quad(v3(x1,y1,z2), v3(x2,y1,z2), v3(x2,y2,z2) ,v3(x1,y2,z2), wireMetal.color(), wireMetalFront);
 
         return helper;
     }

@@ -22,9 +22,7 @@ import org.jimmybobjim.circuitcraft.materials.blocks.CCBlocks;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.WireHarnessHoldable;
 import org.jimmybobjim.circuitcraft.materials.items.CCItems;
 import org.jimmybobjim.circuitcraft.util.BakedModelHelper;
-import org.jimmybobjim.circuitcraft.util.Util;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 import java.util.List;
 
@@ -65,15 +63,11 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
     private final boolean FACADE;
 
     private TextureAtlasSprite
+            facade,
             bottom,
             side_long,
             side_short,
             top;
-
-    private final List<TextureAtlasSprite>
-            wire_front_insulations = new ArrayList<>(16),
-            wire_front_materials = new ArrayList<>(16),
-            wire_sides = new ArrayList<>(16);
 
     private void initTextures() {
         if (bottom == null) {
@@ -81,12 +75,6 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
             side_long = getTexture("block/wire_harness_block/base/side_long");
             side_short = getTexture("block/wire_harness_block/base/side_short");
             top = getTexture("block/wire_harness_block/base/top");
-        }
-
-        for (int i : new int[]{1, 2, 4, 8, 16}) {
-            wire_front_insulations.add(getTexture("block/wire_harness_block/wire/wire_front_insulation_size_" + i));
-            wire_front_materials.add(getTexture("block/wire_harness_block/wire/wire_front_material_size_" + i));
-            wire_sides.add(getTexture("block/wire_harness_block/wire/wire_side_width_" + i));
         }
     }
 
@@ -168,7 +156,7 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
         }
 
         wireDataString.deleteCharAt(wireDataString.length()-1).append("]");
-        Util.sendMessage(wireDataString.toString());
+//        Util.sendMessage(wireDataString.toString());
 
         quads.rotateAll(wireHarnessData.xRot * 90, wireHarnessData.yRot * 90, wireHarnessData.zRot * 90);
 

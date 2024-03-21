@@ -18,17 +18,17 @@ import net.minecraftforge.client.model.data.ModelData;
 import net.minecraftforge.client.model.geometry.IGeometryBakingContext;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
-import org.jimmybobjim.circuitcraft.materials.blocks.CCBlocks;
+import org.jimmybobjim.circuitcraft.CircuitCraft;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.WireHarnessHoldable;
 import org.jimmybobjim.circuitcraft.materials.items.CCItems;
 import org.jimmybobjim.circuitcraft.util.BakedModelHelper;
+import org.jimmybobjim.circuitcraft.util.Util;
 
 import java.util.HashMap;
 import java.util.List;
 
 import static org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.wireHarnessBlock.WireHarnessBlock.*;
-import static org.jimmybobjim.circuitcraft.util.BakedModelHelper.cubeSprite;
-import static org.jimmybobjim.circuitcraft.util.BakedModelHelper.getTexture;
+import static org.jimmybobjim.circuitcraft.util.BakedModelHelper.*;
 import static org.jimmybobjim.circuitcraft.util.Util.v3;
 
 public class WireHarnessBakedModel implements IDynamicBakedModel {
@@ -37,7 +37,7 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
             int yRot,
             int zRot,
             boolean isFacadeBlockSolid,
-            BlockState facadeBlock,
+            @Nullable BlockState facadeBlock,
             List<WireHarnessHoldable.WireData> wireDatas
     ) {
         @Override
@@ -71,6 +71,7 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     private void initTextures() {
         if (bottom == null) {
+            facade = getTexture("block/wire_harness_block/facade");
             bottom = getTexture("block/wire_harness_block/base/bottom");
             side_long = getTexture("block/wire_harness_block/base/side_long");
             side_short = getTexture("block/wire_harness_block/base/side_short");
@@ -80,7 +81,7 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     private WireHarnessData getData(@Nullable BlockState pState, @NotNull ModelData modelData) {
         if (pState == null) {
-            return new WireHarnessData(0,0,0, true, CCBlocks.FACADE_BLOCK.get().defaultBlockState(), List.of(
+            return new WireHarnessData(0,0,0, true, null, List.of(
                     ((WireHarnessHoldable) CCItems.WIRE_COPPER_RED_X1.get()).getWireData(0),
                     ((WireHarnessHoldable) CCItems.WIRE_COPPER_RED_X1.get()).getWireData(1),
                     ((WireHarnessHoldable) CCItems.WIRE_COPPER_RED_X1.get()).getWireData(2),
@@ -111,6 +112,28 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState pState, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData modelData, @Nullable RenderType renderType) {
+        initTextures();
+
+        if (FACADE) {
+            Util.sendMessage("facade");
+
+            if (pState==null) {
+                Util.sendMessage("state");
+
+                if (side==null && (renderType==null || renderType.equals(RenderType.solid()))) {
+                    Util.sendMessage("renderType");
+                    return List.of(
+                            basicQuad(v3(0, 16, 16), v3(16, 16, 16), v3(16, 16, 0), v3(0, 16, 0), facade),
+                            basicQuad(v3(0, 0, 0), v3(16, 0, 0), v3(16, 0, 16), v3(0, 0, 16), facade),
+                            basicQuad(v3(16, 0, 0), v3(16, 16, 0), v3(16, 16, 16), v3(16, 0, 16), facade),
+                            basicQuad(v3(0, 0, 16), v3(0, 16, 16), v3(0, 16, 0), v3(0, 0, 0), facade),
+                            basicQuad(v3(0, 16, 0), v3(16, 16, 0), v3(16, 0, 0), v3(0, 0, 0), facade),
+                            basicQuad(v3(0, 0, 16), v3(16, 0, 16), v3(16, 16, 16), v3(0, 16, 16), facade)
+                    );
+                }
+            }
+        }
+
         WireHarnessData wireHarnessData = getData(pState, modelData);
 
         List<BakedQuad> facadeQuads = null;
@@ -120,14 +143,20 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
             if (renderType == null || renderTypes.contains(renderType)) {
                 if (wireHarnessData.isFacadeBlockSolid) {
-                    return model.getQuads(pState, side, rand, ModelData.EMPTY, renderType);
+                    try {
+                        return model.getQuads(pState, side, rand, ModelData.EMPTY, renderType);
+                    } catch (Exception e) {
+                        CircuitCraft.LOGGER.error(e.toString());
+                    }
                 } else {
-                    facadeQuads = model.getQuads(pState, side, rand, ModelData.EMPTY, renderType);
+                    try {
+                        facadeQuads = model.getQuads(pState, side, rand, ModelData.EMPTY, renderType);
+                    } catch (Exception e) {
+                        CircuitCraft.LOGGER.error(e.toString());
+                    }
                 }
             }
         }
-
-        initTextures();
 
         BakedModelHelper quads = new BakedModelHelper();
 
@@ -139,14 +168,10 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
         //south bracket
         quads.cube(v3(0,0,11.25), v3(16,0.5,12.75), baseSprites);
 
-        StringBuilder wireDataString = new StringBuilder("[");
         for (int i = 0; i < 16; i++) {
             WireHarnessHoldable.WireData wireData = wireHarnessData.wireDatas.get(i);
-//            WireHarnessHoldable.WireData wireData = ((WireHarnessHoldable) CCItems.WIRE_COPPER_RED_X1.get()).getWireData(i);
 
             double width = wireData.width().getWidth();
-
-            wireDataString.append(width).append(",");
 
             if (width != 0) {
                 quads.add(wireData.wireTexture());
@@ -154,9 +179,6 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
                 quads.cube(v3((width / 8) + i, 0.5, 11.625), v3((width * 0.875) + i, (width * 0.625) + 0.5, 12.375), top);
             }
         }
-
-        wireDataString.deleteCharAt(wireDataString.length()-1).append("]");
-//        Util.sendMessage(wireDataString.toString());
 
         quads.rotateAll(wireHarnessData.xRot * 90, wireHarnessData.yRot * 90, wireHarnessData.zRot * 90);
 
@@ -171,7 +193,7 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     @Override
     public boolean useAmbientOcclusion() {
-        return true;
+        return false;
     }
 
     @Override

@@ -103,7 +103,6 @@ public class WireHarnessBlock extends XYZRotatableBlockEntity {
 
     @Override
     @ParametersAreNonnullByDefault
-    @SuppressWarnings("deprecation")
     public @NotNull RenderShape getRenderShape(BlockState pState) {
         return RenderShape.MODEL;
     }

@@ -8,6 +8,7 @@ import net.minecraftforge.data.event.GatherDataEvent;
 import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.common.Mod;
 import org.jimmybobjim.circuitcraft.CircuitCraft;
+import org.jimmybobjim.circuitcraft.datagen.languageProviders.CCLanguageProviderEN_US;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -24,7 +25,8 @@ public class DataGenerators {
         generator.addProvider(event.includeServer(), CCLootTableProvider.create(packOutput));
         generator.addProvider(event.includeServer(), new CCBlockTagGenerator(packOutput, lookupProvider, existingFileHelper));
 
-        generator.addProvider(event.includeClient(), new CCItemModelProvider(packOutput, existingFileHelper));
         generator.addProvider(event.includeClient(), new CCBlockStateProvider(packOutput, existingFileHelper));
+        generator.addProvider(event.includeClient(), new CCItemModelProvider(packOutput, existingFileHelper));
+        generator.addProvider(event.includeClient(), new CCLanguageProviderEN_US(packOutput, "en_us"));
     }
 }

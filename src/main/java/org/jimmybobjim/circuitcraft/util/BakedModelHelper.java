@@ -108,17 +108,6 @@ public class BakedModelHelper {
         cube(pos1, pos2, Color.WHITE, sprites);
     }
 
-    private static void putVertex(VertexConsumer builder, Position normal, Vec3 vec, float u, float v, Color color, TextureAtlasSprite sprite) {
-        float iu = sprite.getU(u), iv = sprite.getV(v);
-
-        builder.vertex(vec.x/16, vec.y/16, vec.z/16)
-                .uv(iu, iv)
-                .uv2(0, 0)
-                .color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
-                .normal((float) normal.x(), (float) normal.y(), (float) normal.z())
-                .endVertex();
-    }
-
     public void rotateAll(int x, int y, int z) {
         for (int i = 0; i < num; i++) {
             v1s.set(i, Util.rotate(v1s.get(i), x, y, z));
@@ -177,6 +166,31 @@ public class BakedModelHelper {
         }
 
         return quads;
+    }
+
+    private static void putVertex(VertexConsumer builder, Position normal, Vec3 vec, float u, float v, Color color, TextureAtlasSprite sprite) {
+        float iu = sprite.getU(u), iv = sprite.getV(v);
+
+        builder.vertex(vec.x/16, vec.y/16, vec.z/16)
+                .uv(iu, iv)
+                .uv2(0, 0)
+                .color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
+                .normal((float) normal.x(), (float) normal.y(), (float) normal.z())
+                .endVertex();
+    }
+
+    public static BakedQuad basicQuad(Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4, TextureAtlasSprite sprite) {
+        Vec3 normal = v3.subtract(v2).cross(v1.subtract(v2)).normalize();
+
+        BakedQuad[] quad = new BakedQuad[1];
+        QuadBakingVertexConsumer builder = new QuadBakingVertexConsumer(q -> quad[0] = q);
+        builder.setSprite(sprite);
+        builder.setDirection(Direction.getNearest(normal.x, normal.y, normal.z));
+        putVertex(builder, normal, v1, 0, 0, Color.WHITE, sprite);
+        putVertex(builder, normal, v2, 0, 16, Color.WHITE, sprite);
+        putVertex(builder, normal, v3, 16, 16, Color.WHITE, sprite);
+        putVertex(builder, normal, v4, 16, 0, Color.WHITE, sprite);
+        return quad[0];
     }
 
     public static HashMap<Direction, Color> cubeColor(Color up, Color down, Color north, Color south, Color east, Color west) {

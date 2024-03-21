@@ -32,7 +32,7 @@ public class CCBlockStateProvider extends BlockStateProvider {
     }
 
     private void registerWireHarness() {
-        BlockModelBuilder model = models().getBuilder("wireharness")
+        BlockModelBuilder model = models().getBuilder("wire_harness")
                 .parent(models().getExistingFile(mcLoc("cube")))
                 .customLoader((builder, helper) -> new WireHarnessLoaderBuilder(WireHarnessModelLoader.GENERATOR_LOADER, builder, helper, false))
                 .end();
@@ -53,7 +53,7 @@ public class CCBlockStateProvider extends BlockStateProvider {
         private final boolean FACADE;
         protected WireHarnessLoaderBuilder(ResourceLocation loaderId, BlockModelBuilder parent, ExistingFileHelper existingFileHelper, boolean facade) {
             super(loaderId, parent, existingFileHelper);
-            FACADE = facade;
+            this.FACADE = facade;
         }
 
         @Override

@@ -39,7 +39,7 @@ public class FacadeBlock extends WireHarnessBlock {
             BlockState mimicBlock = facadeBE.getMimicBlock();
 
             if (mimicBlock != null) {
-                VoxelShape mimicShape = mimicBlock.getShape(pLevel, pPos, pContext);
+                VoxelShape mimicShape = mimicBlock.getCollisionShape(pLevel, pPos, pContext);
 
                 if (mimicShape == Block.box(0,0,0,16,16,16) && mimicBlock.isSolidRender(pLevel, pPos)) {
                     return mimicShape;

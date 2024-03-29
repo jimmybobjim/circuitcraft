@@ -1,13 +1,16 @@
 package org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.wireHarnessBlock;
 
 import net.minecraft.core.BlockPos;
+import net.minecraft.core.Direction;
 import net.minecraft.world.InteractionHand;
 import net.minecraft.world.InteractionResult;
 import net.minecraft.world.entity.LivingEntity;
 import net.minecraft.world.entity.player.Player;
 import net.minecraft.world.item.ItemStack;
+import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.BlockGetter;
 import net.minecraft.world.level.Level;
+import net.minecraft.world.level.LevelAccessor;
 import net.minecraft.world.level.LevelReader;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.RenderShape;
@@ -15,23 +18,31 @@ import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.entity.BlockEntityTicker;
 import net.minecraft.world.level.block.entity.BlockEntityType;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.material.FluidState;
+import net.minecraft.world.level.material.Fluids;
 import net.minecraft.world.phys.BlockHitResult;
 import net.minecraft.world.phys.shapes.CollisionContext;
 import net.minecraft.world.phys.shapes.VoxelShape;
+import net.minecraft.world.ticks.ScheduledTick;
 import net.minecraftforge.client.model.data.ModelProperty;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlockEntities;
+import org.jimmybobjim.circuitcraft.materials.blocks.custom.PotentiallyWaterLoggableBlock;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.base.XYZRotatableBlockEntity;
+import org.jimmybobjim.circuitcraft.materials.blocks.custom.enumProperties.WaterLoggable;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.WireHarnessHoldable;
 import org.jimmybobjim.circuitcraft.util.ShapeHelper;
 
+import javax.annotation.Nonnull;
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.List;
 
+import static org.jimmybobjim.circuitcraft.materials.blocks.CCBlockStates.WATER_LOGGABLE;
 import static org.jimmybobjim.circuitcraft.util.Util.v3;
 
-public class WireHarnessBlock extends XYZRotatableBlockEntity {
+public class WireHarnessBlock extends XYZRotatableBlockEntity implements PotentiallyWaterLoggableBlock {
     public static final ModelProperty<List<WireHarnessHoldable.WireData>> WIRE_DATA = new ModelProperty<>();
     public static final ModelProperty<BlockState> FACADE_BLOCK_ID = new ModelProperty<>();
     public static final ModelProperty<Boolean> IS_FACADE_BLOCK_SOLID = new ModelProperty<>();
@@ -98,8 +109,46 @@ public class WireHarnessBlock extends XYZRotatableBlockEntity {
         return shape.getShapes();
     }
 
-    /**block entity stuff below
-     */
+    // water logging stuff below
+
+    @Override
+    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
+        super.createBlockStateDefinition(pBuilder);
+        pBuilder.add(WATER_LOGGABLE);
+    }
+
+    @Override
+    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
+        BlockState parentState = super.getStateForPlacement(pContext);
+
+        if (parentState == null) return null;
+
+        return parentState.setValue(WATER_LOGGABLE, pContext.getLevel().getFluidState(
+                pContext.getClickedPos()).getType() == Fluids.WATER
+                        ? WaterLoggable.WATERLOGGED
+                        : WaterLoggable.NOT_WATERLOGGED);
+    }
+
+    @Override
+    @ParametersAreNonnullByDefault
+    @SuppressWarnings("deprecation")
+    public @NotNull BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
+        if (pState.getValue(WATER_LOGGABLE) == WaterLoggable.WATERLOGGED) {
+            pLevel.getFluidTicks().schedule(new ScheduledTick<>(Fluids.WATER, pCurrentPos, Fluids.WATER.getTickDelay(pLevel), 0L));
+        }
+
+        return super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
+    }
+
+    @Override
+    @SuppressWarnings("deprecation")
+    public @NotNull FluidState getFluidState(@Nonnull BlockState pState) {
+        return pState.getValue(WATER_LOGGABLE) == WaterLoggable.WATERLOGGED
+                ? Fluids.WATER.getSource(false)
+                : super.getFluidState(pState);
+    }
+
+    // block entity stuff below
 
     @Override
     @ParametersAreNonnullByDefault

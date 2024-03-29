@@ -7,8 +7,6 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
-import net.minecraft.world.level.block.Blocks;
-import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -30,7 +28,7 @@ public class CCBlocks {
             WIRE_HARNESS_BLOCK = registerBlockItem("wire_harness_block",
                     () -> new WireHarnessBlock(CCBlockBehaviours.WIRE_HARNESS)),
             FACADE_BLOCK = registerBlock("facade_block",
-                    () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.STONE)));
+                    () -> new FacadeBlock(CCBlockBehaviours.WIRE_HARNESS));
 
     private static <T extends Block> RegistryObject<T> registerBlockItem(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);                                //generate block
@@ -47,9 +45,7 @@ public class CCBlocks {
             public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
                 super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
 
-                if (pStack.hasTag()) {
-                    pTooltip.add(hoverText);
-                }
+                pTooltip.add(hoverText);
             }
         });
 
@@ -65,9 +61,7 @@ public class CCBlocks {
             public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
                 super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
 
-                if (pStack.hasTag()) {
-                    pTooltip.addAll(hoverTexts);
-                }
+                pTooltip.addAll(hoverTexts);
             }
         });
 

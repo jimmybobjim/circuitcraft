@@ -20,8 +20,10 @@ public class CCBlockStateProvider extends BlockStateProvider {
 
     @Override
     protected void registerStatesAndModels() {
-        registerWireHarness();
-        registerFacade();
+        registerWireHarness("wire_harness", false, CCBlocks.WIRE_HARNESS_BLOCK.get());
+        registerWireHarness("facade", true, CCBlocks.FACADE_BLOCK.get());
+//        registerWireHarness();
+//        registerFacade();
         //blockWithItem(CCBlocks.EXAMPLE_BLOCK);
 
         //horizontalBlock(CCBlocks.WIRE_HARNESS_BLOCK.get(), new ModelFile.UncheckedModelFile(modLoc("block/wire_harness_block")));
@@ -31,22 +33,31 @@ public class CCBlockStateProvider extends BlockStateProvider {
         simpleBlockWithItem(blockRegistryObject.get(), cubeAll(blockRegistryObject.get()));
     }
 
-    private void registerWireHarness() {
-        BlockModelBuilder model = models().getBuilder("wire_harness")
+//    private void registerWireHarness() {
+//        BlockModelBuilder model = models().getBuilder("wire_harness")
+//                .parent(models().getExistingFile(mcLoc("cube")))
+//                .customLoader((builder, helper) -> new WireHarnessLoaderBuilder(WireHarnessModelLoader.GENERATOR_LOADER, builder, helper, false))
+//                .end();
+//
+//        simpleBlock(CCBlocks.WIRE_HARNESS_BLOCK.get(), model);
+//    }
+//
+//    private void registerFacade() {
+//        BlockModelBuilder model = models().getBuilder("facade")
+//                .parent(models().getExistingFile(mcLoc("cube")))
+//                .customLoader((builder, helper) -> new WireHarnessLoaderBuilder(WireHarnessModelLoader.GENERATOR_LOADER, builder, helper, true))
+//                .end();
+//
+//        simpleBlock(CCBlocks.FACADE_BLOCK.get(), model);
+//    }
+
+    private void registerWireHarness(String path, boolean facade, Block block) {
+        BlockModelBuilder model = models().getBuilder(path)
                 .parent(models().getExistingFile(mcLoc("cube")))
-                .customLoader((builder, helper) -> new WireHarnessLoaderBuilder(WireHarnessModelLoader.GENERATOR_LOADER, builder, helper, false))
+                .customLoader((builder, helper) -> new WireHarnessLoaderBuilder(WireHarnessModelLoader.GENERATOR_LOADER, builder, helper, facade))
                 .end();
 
-        simpleBlock(CCBlocks.WIRE_HARNESS_BLOCK.get(), model);
-    }
-
-    private void registerFacade() {
-        BlockModelBuilder model = models().getBuilder("facade")
-                .parent(models().getExistingFile(mcLoc("cube")))
-                .customLoader((builder, helper) -> new WireHarnessLoaderBuilder(WireHarnessModelLoader.GENERATOR_LOADER, builder, helper, true))
-                .end();
-
-        simpleBlock(CCBlocks.FACADE_BLOCK.get(), model);
+        simpleBlock(block, model);
     }
 
     public static class WireHarnessLoaderBuilder extends CustomLoaderBuilder<BlockModelBuilder> {

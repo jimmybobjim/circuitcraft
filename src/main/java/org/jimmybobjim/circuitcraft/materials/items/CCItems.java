@@ -25,7 +25,7 @@ public class CCItems {
     //block items
     @SuppressWarnings("unused")
     public static final RegistryObject<Item>
-            FACADE_BI = ITEMS.register("facade", () -> new FacadeBlockItem(CCBlocks.FACADE_BLOCK.get(),
+            FACADE_BI = ITEMS.register("facade_block", () -> new FacadeBlockItem(CCBlocks.FACADE_BLOCK.get(),
             new Item.Properties()));
 
     public static void register(IEventBus modEventBus) {

@@ -17,17 +17,22 @@ import net.minecraft.world.item.context.UseOnContext;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.SimpleWaterloggedBlock;
 import net.minecraft.world.level.block.SoundType;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.registries.ForgeRegistries;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlocks;
+import org.jimmybobjim.circuitcraft.materials.blocks.custom.enumProperties.WaterLoggable;
 import org.jimmybobjim.circuitcraft.util.ReplaceBlockItemUseContext;
+import org.jimmybobjim.circuitcraft.util.Util;
 
 import javax.annotation.Nonnull;
 import javax.annotation.Nullable;
 import java.util.List;
 
+import static org.jimmybobjim.circuitcraft.materials.blocks.CCBlockStates.WATER_LOGGABLE;
 import static org.jimmybobjim.circuitcraft.materials.blocks.custom.base.XYZRotatableBlockEntity.*;
 
 public class FacadeBlockItem extends BlockItem {
@@ -80,8 +85,27 @@ public class FacadeBlockItem extends BlockItem {
         return true;
     }
 
-    // This function is called when our block item is right clicked on something. When this happens
-    // we want to either set the minic block or place the facade block
+    private static WaterLoggable waterLoggable(BlockState state, Level level, @Nonnull ItemStack stack) {
+        BlockState mimicBlock = getMimicBlock(level, stack);
+
+        if (Util.implementsInterface(mimicBlock.getBlock().getClass(), SimpleWaterloggedBlock.class))
+        {
+            if (state.hasProperty(WATER_LOGGABLE) && state.getValue(WATER_LOGGABLE) == WaterLoggable.WATERLOGGED) {
+                return WaterLoggable.WATERLOGGED;
+            }
+
+            if (mimicBlock.hasProperty(BlockStateProperties.WATERLOGGED) && mimicBlock.getValue(BlockStateProperties.WATERLOGGED)) {
+                return WaterLoggable.WATERLOGGED;
+            } else {
+                return WaterLoggable.NOT_WATERLOGGED;
+            }
+        } else {
+            return WaterLoggable.NOT_WATERLOGGABLE;
+        }
+    }
+
+    // This function is called when our block item is right-clicked on something. When this happens
+    // we want to either set the mimic block or place the facade block
     @Nonnull
     @Override
     public InteractionResult useOn(UseOnContext context) {
@@ -103,7 +127,8 @@ public class FacadeBlockItem extends BlockItem {
                         .setValue(X_ROT, state.getValue(X_ROT))
                         .setValue(Y_ROT, state.getValue(Y_ROT))
                         .setValue(Z_ROT, state.getValue(Z_ROT))
-                        .setValue(ATTACHED_FACE, state.getValue(ATTACHED_FACE));
+                        .setValue(ATTACHED_FACE, state.getValue(ATTACHED_FACE))
+                        .setValue(WATER_LOGGABLE, waterLoggable(state, world, itemInHand));
 
                 if (placeBlock(blockContext, placementState)) {
                     SoundType soundtype = world.getBlockState(pos).getBlock().getSoundType(world.getBlockState(pos), world, pos, player);

@@ -62,22 +62,22 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
     private final IGeometryBakingContext context;
     private final boolean FACADE;
 
-    private TextureAtlasSprite
-            facade,
-            bottom,
-            side_long,
-            side_short,
-            top;
-
-    private void initTextures() {
-        if (bottom == null) {
-            facade = getTexture("block/wire_harness_block/facade");
-            bottom = getTexture("block/wire_harness_block/base/bottom");
-            side_long = getTexture("block/wire_harness_block/base/side_long");
-            side_short = getTexture("block/wire_harness_block/base/side_short");
+    private final TextureAtlasSprite
+            facade = getTexture("block/wire_harness_block/facade"),
+            bottom = getTexture("block/wire_harness_block/base/bottom"),
+            side_long = getTexture("block/wire_harness_block/base/side_long"),
+            side_short = getTexture("block/wire_harness_block/base/side_short"),
             top = getTexture("block/wire_harness_block/base/top");
-        }
-    }
+
+//    private void initTextures() {
+//        if (bottom == null) {
+//            facade = getTexture("block/wire_harness_block/facade");
+//            bottom = getTexture("block/wire_harness_block/base/bottom");
+//            side_long = getTexture("block/wire_harness_block/base/side_long");
+//            side_short = getTexture("block/wire_harness_block/base/side_short");
+//            top = getTexture("block/wire_harness_block/base/top");
+//        }
+//    }
 
     private WireHarnessData getData(@Nullable BlockState pState, @NotNull ModelData modelData) {
         if (pState == null) {
@@ -112,33 +112,24 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState pState, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData modelData, @Nullable RenderType renderType) {
-        initTextures();
+//        initTextures();
 
-        if (FACADE) {
-            Util.sendMessage("facade");
-
-            if (pState==null) {
-                Util.sendMessage("state");
-
-                if (side==null && (renderType==null || renderType.equals(RenderType.solid()))) {
-                    Util.sendMessage("renderType");
-                    return List.of(
-                            basicQuad(v3(0, 16, 16), v3(16, 16, 16), v3(16, 16, 0), v3(0, 16, 0), facade),
-                            basicQuad(v3(0, 0, 0), v3(16, 0, 0), v3(16, 0, 16), v3(0, 0, 16), facade),
-                            basicQuad(v3(16, 0, 0), v3(16, 16, 0), v3(16, 16, 16), v3(16, 0, 16), facade),
-                            basicQuad(v3(0, 0, 16), v3(0, 16, 16), v3(0, 16, 0), v3(0, 0, 0), facade),
-                            basicQuad(v3(0, 16, 0), v3(16, 16, 0), v3(16, 0, 0), v3(0, 0, 0), facade),
-                            basicQuad(v3(0, 0, 16), v3(16, 0, 16), v3(16, 16, 16), v3(0, 16, 16), facade)
-                    );
-                }
-            }
+        if (FACADE && pState==null && side==null && (renderType==null || renderType.equals(RenderType.solid()))) {
+            return List.of(
+                    basicQuad(v3(0, 16, 16), v3(16, 16, 16), v3(16, 16, 0), v3(0, 16, 0), facade),
+                    basicQuad(v3(0, 0, 0), v3(16, 0, 0), v3(16, 0, 16), v3(0, 0, 16), facade),
+                    basicQuad(v3(16, 0, 0), v3(16, 16, 0), v3(16, 16, 16), v3(16, 0, 16), facade),
+                    basicQuad(v3(0, 0, 16), v3(0, 16, 16), v3(0, 16, 0), v3(0, 0, 0), facade),
+                    basicQuad(v3(0, 16, 0), v3(16, 16, 0), v3(16, 0, 0), v3(0, 0, 0), facade),
+                    basicQuad(v3(0, 0, 16), v3(16, 0, 16), v3(16, 16, 16), v3(0, 16, 16), facade)
+            );
         }
 
         WireHarnessData wireHarnessData = getData(pState, modelData);
 
         List<BakedQuad> facadeQuads = null;
         if (wireHarnessData.facadeBlock != null) {
-            BakedModel model = Minecraft.getInstance().getBlockRenderer().getBlockModelShaper().getBlockModel(wireHarnessData.facadeBlock);
+            BakedModel model = Util.getBlockModel(wireHarnessData.facadeBlock);
             ChunkRenderTypeSet renderTypes = model.getRenderTypes(wireHarnessData.facadeBlock, rand, modelData);
 
             if (renderType == null || renderTypes.contains(renderType)) {
@@ -203,7 +194,7 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     @Override
     public boolean usesBlockLight() {
-        return false;
+        return true;
     }
 
     @Override
@@ -216,6 +207,17 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
         return bottom == null
                 ? Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation("minecraft", "missingno"))
                 : bottom;
+    }
+
+    @Override
+    public @NotNull TextureAtlasSprite getParticleIcon(@NotNull ModelData data) {
+        BlockState facadeBlock = data.get(FACADE_BLOCK_ID);
+
+        if (facadeBlock != null) {
+            return Util.getBlockModel(facadeBlock).getParticleIcon(data);
+        } else {
+            return getParticleIcon();
+        }
     }
 
     @Override

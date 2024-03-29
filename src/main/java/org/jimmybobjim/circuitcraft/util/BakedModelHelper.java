@@ -219,9 +219,16 @@ public class BakedModelHelper {
         return sprites;
     }
 
+    private static final HashMap<String, TextureAtlasSprite> spritesMap = new HashMap<>();
     public static TextureAtlasSprite getTexture(String path) {
-        return Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(
-                new ResourceLocation(CircuitCraft.MODID, path)
-        );
+        if (spritesMap.containsKey(path)) {
+            return spritesMap.get(path);
+        } else {
+            TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(
+                    new ResourceLocation(CircuitCraft.MODID, path)
+            );
+            spritesMap.put(path, sprite);
+            return sprite;
+        }
     }
 }

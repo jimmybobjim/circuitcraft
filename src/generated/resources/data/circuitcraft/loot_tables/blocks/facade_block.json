@@ -11,7 +11,7 @@
       "entries": [
         {
           "type": "minecraft:item",
-          "name": "circuitcraft:facade"
+          "name": "circuitcraft:facade_block"
         }
       ],
       "rolls": 1.0

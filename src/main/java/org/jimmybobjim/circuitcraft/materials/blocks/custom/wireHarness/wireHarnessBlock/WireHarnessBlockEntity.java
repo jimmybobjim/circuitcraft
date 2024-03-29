@@ -28,7 +28,6 @@ import org.jetbrains.annotations.Nullable;
 import org.jimmybobjim.circuitcraft.CircuitCraft;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlockEntities;
 import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.WireHarnessHoldable;
-import org.jimmybobjim.circuitcraft.materials.items.CCItems;
 import org.jimmybobjim.circuitcraft.util.Util;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -223,13 +222,11 @@ public class WireHarnessBlockEntity extends BlockEntity {
     }
 
     public InteractionResult use(BlockState pState, Level pLevel, BlockPos pPos, Player pPlayer, InteractionHand pHand, BlockHitResult pHit) {
-        if (pPlayer.getItemInHand(InteractionHand.MAIN_HAND).getItem() == CCItems.FACADE_BI.get()) {
-            return InteractionResult.FAIL;
-        }
-
         //we don't !pLevel.isClientSide() because update() requires it is ran client side
         if (pHand == InteractionHand.MAIN_HAND) {
             ItemStack playerItem = pPlayer.getItemInHand(InteractionHand.MAIN_HAND);
+
+            if (!Util.implementsInterface(playerItem.getItem().getClass(), WireHarnessHoldable.class)) return InteractionResult.FAIL;
 
             float
                     xRot = pState.getValue(X_ROT) * 90,
@@ -247,22 +244,19 @@ public class WireHarnessBlockEntity extends BlockEntity {
                 if (Util.isPointInsideRectangle(clickPos2, v2(i, 3.25f), v2(i + 1, 12.75f))) {
 
                     if (wireItemHandler.getStackInSlot(i) == ItemStack.EMPTY) {
+                        WireHarnessHoldable wire = (WireHarnessHoldable) playerItem.getItem();
 
-                        if (Util.implementsInterface(playerItem.getItem().getClass(), WireHarnessHoldable.class)) {
-                            WireHarnessHoldable wire = (WireHarnessHoldable) playerItem.getItem();
+                        if (wireItemHandler.isItemValid(i, playerItem)) {
 
-                            if (wireItemHandler.isItemValid(i, playerItem)) {
+                            wireItemHandler.setStackInSlot(i, playerItem.copyWithCount(1));
 
-                                wireItemHandler.setStackInSlot(i, playerItem.copyWithCount(1));
+                            WIRE_DATA.set(i, wire.getWireData(i));
 
-                                WIRE_DATA.set(i, wire.getWireData(i));
-
-                                if (!pPlayer.isCreative()) {
-                                    playerItem.setCount(playerItem.getCount() - 1);
-                                }
-                            } else {
-                                return InteractionResult.FAIL;
+                            if (!pPlayer.isCreative()) {
+                                playerItem.setCount(playerItem.getCount() - 1);
                             }
+                        } else {
+                            return InteractionResult.FAIL;
                         }
                     } else if (pPlayer.isCrouching()) {
                         if (!pPlayer.isCreative()) {
@@ -294,8 +288,6 @@ public class WireHarnessBlockEntity extends BlockEntity {
 
     @Override
     public @NotNull ModelData getModelData() {
-        Util.sendMessage("model data updated on wire harness @ " + worldPosition);
-
         return ModelData.builder().with(WireHarnessBlock.WIRE_DATA, WIRE_DATA).build();
     }
 }

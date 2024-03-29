@@ -9,6 +9,7 @@ import net.minecraft.network.protocol.game.ClientboundBlockEntityDataPacket;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.entity.BlockEntity;
 import net.minecraft.world.level.block.state.BlockState;
+import net.minecraft.world.level.block.state.properties.BlockStateProperties;
 import net.minecraftforge.client.model.data.ModelData;
 import org.jetbrains.annotations.NotNull;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlockEntities;
@@ -74,9 +75,11 @@ public class FacadeBlockEntity extends WireHarnessBlockEntity {
                 .build();
     }
 
-
     public void setMimicBlock(BlockState mimicBlock) {
-        this.mimicBlock = mimicBlock;
+        this.mimicBlock = mimicBlock.hasProperty(BlockStateProperties.WATERLOGGED)
+                ? mimicBlock.setValue(BlockStateProperties.WATERLOGGED, false)
+                : mimicBlock;
+
         setChanged();
         getLevel().sendBlockUpdated(getBlockPos(), getBlockState(), getBlockState(), Block.UPDATE_ALL);
     }

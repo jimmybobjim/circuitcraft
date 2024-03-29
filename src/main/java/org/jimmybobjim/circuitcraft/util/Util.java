@@ -1,10 +1,10 @@
 package org.jimmybobjim.circuitcraft.util;
 
 import net.minecraft.client.Minecraft;
+import net.minecraft.client.resources.model.BakedModel;
 import net.minecraft.core.BlockPos;
 import net.minecraft.network.chat.Component;
-import net.minecraft.world.level.BlockGetter;
-import net.minecraft.world.level.Level;
+import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.phys.Vec2;
 import net.minecraft.world.phys.Vec3;
 import net.minecraftforge.client.model.data.ModelData;
@@ -25,6 +25,10 @@ public class Util {
         if (integer > max) {
             throw new IllegalArgumentException(integer + "is above maximum (" + max + ")");
         }
+    }
+
+    public static BakedModel getBlockModel(BlockState blockState) {
+        return Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
     }
 
     public static Vec3 rotate(Vec3 pos, float x, float y, float z) {

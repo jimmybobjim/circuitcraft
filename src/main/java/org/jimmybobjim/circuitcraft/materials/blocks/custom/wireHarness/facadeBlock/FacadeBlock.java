@@ -30,68 +30,6 @@ public class FacadeBlock extends WireHarnessBlock implements SimpleWaterloggedBl
         super(properties);
     }
 
-    // water logging stuff below
-
-//    private static boolean waterLoggable(BlockGetter pLevel, BlockPos pPos) {
-//        if (pLevel.getBlockEntity(pPos) instanceof FacadeBlockEntity facadeBE) {
-//            return facadeBE.waterLoggable();
-//        }
-//
-//        return false;
-//    }
-//
-//    @Override
-//    protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-//        pBuilder.add(X_ROT, Y_ROT, Z_ROT, ATTACHED_FACE, WATER_LOGGABLE);
-//    }
-//
-//    @Override
-//    public @Nullable BlockState getStateForPlacement(@NotNull BlockPlaceContext pContext) {
-//        BlockState parentState = CCBlocks.WIRE_HARNESS_BLOCK.get().getStateForPlacement(pContext);
-//
-//        if (parentState == null) return null;
-//
-//        if (waterLoggable(pContext.getLevel(), pContext.getClickedPos())) {
-//            return parentState.setValue(BlockStateProperties.WATERLOGGED,
-//                    pContext.getLevel().getFluidState(pContext.getClickedPos()).getType() == Fluids.WATER);
-//        } else {
-//            return parentState.setValue(BlockStateProperties.WATERLOGGED, false);
-//        }
-//    }
-//
-//    @Override
-//    @ParametersAreNonnullByDefault
-//    public @NotNull BlockState updateShape(BlockState pState, Direction pDirection, BlockState pNeighborState, LevelAccessor pLevel, BlockPos pCurrentPos, BlockPos pNeighborPos) {
-//        BlockState parentState = super.updateShape(pState, pDirection, pNeighborState, pLevel, pCurrentPos, pNeighborPos);
-//
-//        if (pState.getValue(WATER_LOGGABLE) == WaterLoggable.NOT_WATERLOGGABLE) {
-//            return parentState.setValue(WATER_LOGGABLE, WaterLoggable.NOT_WATERLOGGABLE);
-//        } else {
-//            return parentState;
-//        }
-//    }
-//
-//    @Override
-//    public @NotNull FluidState getFluidState(@NotNull BlockState pState) {
-//        if (pState.getValue(WATER_LOGGABLE) == WaterLoggable.WATERLOGGED) {
-//            return Fluids.WATER.getSource(false);
-//        } else {
-//            return Fluids.EMPTY.defaultFluidState();
-//        }
-//    }
-//
-//    @Override
-//    @ParametersAreNonnullByDefault
-//    public boolean canPlaceLiquid(BlockGetter pLevel, BlockPos pPos, BlockState pState, Fluid pFluid) {
-//        if (pState.getValue(WATER_LOGGABLE) == WaterLoggable.NOT_WATERLOGGABLE) {
-//            return false;
-//        } else {
-//            return super.canPlaceLiquid(pLevel, pPos, pState, pFluid);
-//        }
-//    }
-
-    //
-
     @Override
     @ParametersAreNonnullByDefault
     public @Nullable BlockEntity newBlockEntity(BlockPos pPos, BlockState pState) {

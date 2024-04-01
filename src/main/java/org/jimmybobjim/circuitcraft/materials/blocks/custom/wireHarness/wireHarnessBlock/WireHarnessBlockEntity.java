@@ -38,7 +38,6 @@ import static org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.w
 import static org.jimmybobjim.circuitcraft.util.Util.v2;
 
 public class WireHarnessBlockEntity extends BlockEntity {
-    public static final String WIRE_DATA_TAG = "wire_data";
     public List<WireHarnessHoldable.WireData> getWIRE_DATA() {
         return WIRE_DATA;
     }

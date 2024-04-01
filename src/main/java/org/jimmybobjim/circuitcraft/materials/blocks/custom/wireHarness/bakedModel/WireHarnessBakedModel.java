@@ -62,23 +62,6 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
     private final IGeometryBakingContext context;
     private final boolean FACADE;
 
-    private final TextureAtlasSprite
-            facade = getTexture("block/wire_harness_block/facade"),
-            bottom = getTexture("block/wire_harness_block/base/bottom"),
-            side_long = getTexture("block/wire_harness_block/base/side_long"),
-            side_short = getTexture("block/wire_harness_block/base/side_short"),
-            top = getTexture("block/wire_harness_block/base/top");
-
-//    private void initTextures() {
-//        if (bottom == null) {
-//            facade = getTexture("block/wire_harness_block/facade");
-//            bottom = getTexture("block/wire_harness_block/base/bottom");
-//            side_long = getTexture("block/wire_harness_block/base/side_long");
-//            side_short = getTexture("block/wire_harness_block/base/side_short");
-//            top = getTexture("block/wire_harness_block/base/top");
-//        }
-//    }
-
     private WireHarnessData getData(@Nullable BlockState pState, @NotNull ModelData modelData) {
         if (pState == null) {
             return new WireHarnessData(0,0,0, true, null, List.of(
@@ -112,16 +95,21 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     @Override
     public @NotNull List<BakedQuad> getQuads(@Nullable BlockState pState, @Nullable Direction side, @NotNull RandomSource rand, @NotNull ModelData modelData, @Nullable RenderType renderType) {
-//        initTextures();
+        TextureAtlasSprite
+                wire_harness_facade = getTexture("block/wire_harness_block/facade"),
+                wire_harness_base_bottom = getTexture("block/wire_harness_block/base/bottom"),
+                wire_harness_base_side_long = getTexture("block/wire_harness_block/base/side_long"),
+                wire_harness_base_side_short = getTexture("block/wire_harness_block/base/side_short"),
+                wire_harness_base_top = getTexture("block/wire_harness_block/base/top");
 
         if (FACADE && pState==null && side==null && (renderType==null || renderType.equals(RenderType.solid()))) {
             return List.of(
-                    basicQuad(v3(0, 16, 16), v3(16, 16, 16), v3(16, 16, 0), v3(0, 16, 0), facade),
-                    basicQuad(v3(0, 0, 0), v3(16, 0, 0), v3(16, 0, 16), v3(0, 0, 16), facade),
-                    basicQuad(v3(16, 0, 0), v3(16, 16, 0), v3(16, 16, 16), v3(16, 0, 16), facade),
-                    basicQuad(v3(0, 0, 16), v3(0, 16, 16), v3(0, 16, 0), v3(0, 0, 0), facade),
-                    basicQuad(v3(0, 16, 0), v3(16, 16, 0), v3(16, 0, 0), v3(0, 0, 0), facade),
-                    basicQuad(v3(0, 0, 16), v3(16, 0, 16), v3(16, 16, 16), v3(0, 16, 16), facade)
+                    basicQuad(v3(0, 16, 16), v3(16, 16, 16), v3(16, 16, 0), v3(0, 16, 0), wire_harness_facade),
+                    basicQuad(v3(0, 0, 0), v3(16, 0, 0), v3(16, 0, 16), v3(0, 0, 16), wire_harness_facade),
+                    basicQuad(v3(16, 0, 0), v3(16, 16, 0), v3(16, 16, 16), v3(16, 0, 16), wire_harness_facade),
+                    basicQuad(v3(0, 0, 16), v3(0, 16, 16), v3(0, 16, 0), v3(0, 0, 0), wire_harness_facade),
+                    basicQuad(v3(0, 16, 0), v3(16, 16, 0), v3(16, 0, 0), v3(0, 0, 0), wire_harness_facade),
+                    basicQuad(v3(0, 0, 16), v3(16, 0, 16), v3(16, 16, 16), v3(0, 16, 16), wire_harness_facade)
             );
         }
 
@@ -151,7 +139,7 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
         BakedModelHelper quads = new BakedModelHelper();
 
-        HashMap<Direction, TextureAtlasSprite> baseSprites = cubeSprite(top, bottom, side_long, side_long, side_short, side_short);
+        HashMap<Direction, TextureAtlasSprite> baseSprites = cubeSprite(wire_harness_base_top, wire_harness_base_bottom, wire_harness_base_side_long, wire_harness_base_side_long, wire_harness_base_side_short, wire_harness_base_side_short);
 
         //north bracket
         quads.cube(v3(0,0,3.25), v3(16,0.5,4.75), baseSprites);
@@ -166,8 +154,8 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
             if (width != 0) {
                 quads.add(wireData.wireTexture());
-                quads.cube(v3((width / 8) + i, 0.5, 3.625), v3((width * 0.875) + i, (width * 0.625) + 0.5, 4.375), top);
-                quads.cube(v3((width / 8) + i, 0.5, 11.625), v3((width * 0.875) + i, (width * 0.625) + 0.5, 12.375), top);
+                quads.cube(v3((width / 8) + i, 0.5, 3.625), v3((width * 0.875) + i, (width * 0.625) + 0.5, 4.375), wire_harness_base_top);
+                quads.cube(v3((width / 8) + i, 0.5, 11.625), v3((width * 0.875) + i, (width * 0.625) + 0.5, 12.375), wire_harness_base_top);
             }
         }
 
@@ -204,9 +192,10 @@ public class WireHarnessBakedModel implements IDynamicBakedModel {
 
     @Override
     public @NotNull TextureAtlasSprite getParticleIcon() {
-        return bottom == null
+        TextureAtlasSprite wire_harness_base_bottom = getTexture("block/wire_harness_block/base/bottom");
+        return wire_harness_base_bottom == null
                 ? Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(new ResourceLocation("minecraft", "missingno"))
-                : bottom;
+                : wire_harness_base_bottom;
     }
 
     @Override

@@ -169,14 +169,18 @@ public class BakedModelHelper {
     }
 
     private static void putVertex(VertexConsumer builder, Position normal, Vec3 vec, float u, float v, Color color, TextureAtlasSprite sprite) {
-        float iu = sprite.getU(u), iv = sprite.getV(v);
+        if (sprite == null) {
+            CircuitCraft.LOGGER.error("sprite is null");
+        } else {
+            float iu = sprite.getU(u), iv = sprite.getV(v);
 
-        builder.vertex(vec.x/16, vec.y/16, vec.z/16)
-                .uv(iu, iv)
-                .uv2(0, 0)
-                .color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
-                .normal((float) normal.x(), (float) normal.y(), (float) normal.z())
-                .endVertex();
+            builder.vertex(vec.x / 16, vec.y / 16, vec.z / 16)
+                    .uv(iu, iv)
+                    .uv2(0, 0)
+                    .color(color.getRed(), color.getGreen(), color.getBlue(), color.getAlpha())
+                    .normal((float) normal.x(), (float) normal.y(), (float) normal.z())
+                    .endVertex();
+        }
     }
 
     public static BakedQuad basicQuad(Vec3 v1, Vec3 v2, Vec3 v3, Vec3 v4, TextureAtlasSprite sprite) {
@@ -221,14 +225,25 @@ public class BakedModelHelper {
 
     private static final HashMap<String, TextureAtlasSprite> spritesMap = new HashMap<>();
     public static TextureAtlasSprite getTexture(String path) {
-        if (spritesMap.containsKey(path)) {
+        if (spritesMap.get(path) != null) {
             return spritesMap.get(path);
         } else {
             TextureAtlasSprite sprite = Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(
                     new ResourceLocation(CircuitCraft.MODID, path)
             );
             spritesMap.put(path, sprite);
+
+            if (sprite == null) CircuitCraft.LOGGER.error("sprite is null at: " + path);
+
             return sprite;
         }
+    }
+
+    public static void refreshTextures() {
+        spritesMap.forEach((path, sprite) -> {
+            spritesMap.put(path, Minecraft.getInstance().getTextureAtlas(InventoryMenu.BLOCK_ATLAS).apply(
+                    new ResourceLocation(CircuitCraft.MODID, path)
+            ));
+        });
     }
 }

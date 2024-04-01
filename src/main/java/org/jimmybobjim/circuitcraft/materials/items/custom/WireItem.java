@@ -45,10 +45,12 @@ public class WireItem extends Item implements WireHarnessHoldable {
 
     @Override
     public BakedModelHelper getWireTexture(int pos) {
+//        initTextures();
+
         TextureAtlasSprite
-                wireInsulationSide = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_insulation_side"),
-                wireInsulationFront = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_insulation_front"),
-                wireMetalFront = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_metal_front");
+                wire_harness_wire_insulation_side = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_insulation_side"),
+                wire_harness_wire_insulation_front = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_insulation_front"),
+                wire_harness_wire_metal_front = BakedModelHelper.getTexture("block/wire_harness_block/wire/wire_metal_front");
 
         int width = getWidth().getWidth();
 
@@ -59,20 +61,20 @@ public class WireItem extends Item implements WireHarnessHoldable {
                 pos2 = v3(((double) width*0.75)+pos, ((double) width/2)+0.5, 16);
 
         helper.cube(pos1, pos2, wireInsulationColor, BakedModelHelper.cubeSprite(
-                wireInsulationSide,
-                wireInsulationSide,
-                wireInsulationFront,
-                wireInsulationFront,
-                wireInsulationSide,
-                wireInsulationSide
+                wire_harness_wire_insulation_side,
+                wire_harness_wire_insulation_side,
+                wire_harness_wire_insulation_front,
+                wire_harness_wire_insulation_front,
+                wire_harness_wire_insulation_side,
+                wire_harness_wire_insulation_side
         ));
 
         double
                 x1 = pos1.x, y1 = pos1.y, z1 = pos1.z,
                 x2 = pos2.x, y2 = pos2.y, z2 = pos2.z;
 
-        helper.quad(v3(x1,y2,z1), v3(x2,y2,z1), v3(x2,y1,z1), v3(x1,y1,z1), wireMetal.color(), wireMetalFront);
-        helper.quad(v3(x1,y1,z2), v3(x2,y1,z2), v3(x2,y2,z2) ,v3(x1,y2,z2), wireMetal.color(), wireMetalFront);
+        helper.quad(v3(x1,y2,z1), v3(x2,y2,z1), v3(x2,y1,z1), v3(x1,y1,z1), wireMetal.color(), wire_harness_wire_metal_front);
+        helper.quad(v3(x1,y1,z2), v3(x2,y1,z2), v3(x2,y2,z2) ,v3(x1,y2,z2), wireMetal.color(), wire_harness_wire_metal_front);
 
         return helper;
     }

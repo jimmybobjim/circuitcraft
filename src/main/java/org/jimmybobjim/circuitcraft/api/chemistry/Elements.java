@@ -1,0 +1,143 @@
+package org.jimmybobjim.circuitcraft.api.chemistry;
+
+@SuppressWarnings("unused")
+public enum Elements implements CompoundHoldable {
+    HYDROGEN("H"),
+    HELIUM("He"),
+    LITHIUM("Li"),
+    BERYLLIUM("Be"),
+    BORON("B"),
+    CARBON("C"),
+    NITROGEN("N"),
+    OXYGEN("O"),
+    FLUORINE("F"),
+    NEON("Ne"),
+    SODIUM("Na"),
+    MAGNESIUM("Mg"),
+    ALUMINIUM("AL"),    // yes I will spell it this way Americans
+    SILICON("Si"),
+    PHOSPHOROUS("P"),
+    SULFUR("S"),
+    CHLORINE("Cl"),
+    ARGON("Ar"),
+    POTASSIUM("K"),
+    CALCIUM("Ca"),
+    SCANDIUM("Sc"),
+    TITANIUM("Ti"),
+    VANADIUM("V"),
+    CHROMIUM("Cr"),
+    MANGANESE("Mn"),
+    IRON("Fe"),
+    COBALT("Co"),
+    NICKEL("Ni"),
+    COPPER("Cu"),
+    ZINC("Zn"),
+    GALLIUM("Ga"),
+    GERMANIUM("Ge"),
+    ARSENIC("Ar"),
+    SELENIUM("Se"),
+    BROMINE("Br"),
+    KRYPTON("Kr"),
+    RUBIDIUM("Rb"),
+    STRONTIUM("Sr"),
+    YTTRIUM("Y"),
+    ZIRCONIUM("Zr"),
+    NIOBIUM("Nb"),
+    MOLYBDENUM("Mo"),
+    TECHNETIUM("Tc"),
+    RUTHENIUM("Ru"),
+    RHODIUM("Rh"),
+    PALLADIUM("Pd"),
+    SILVER("Ag"),
+    CADMIUM("Cd"),
+    INDIUM("In"),
+    TIN("Sn"),
+    ANTIMONY("Sb"),
+    TELLURIUM("Te"),
+    IODINE("I"),
+    XENON("Xe"),
+    CAESIUM("Cs"),
+    BARIUM("Ba"),
+    LANTHANUM("La"),
+    CERIUM("Ce"),
+    PRASEODYMIUM("Pr"),
+    NEODYMIUM("Nd"),
+    PROMETHIUM("Pm"),
+    SAMARIUM("Sm"),
+    EUROPIUM("Eu"),
+    GADOLINIUM("Gd"),
+    TERBIUM("Tb"),
+    DYSPROSIUM("Dy"),
+    HOLMIUM("Ho"),
+    ERBIUM("Er"),
+    THULIUM("Tm"),
+    YTTERBIUM("Yb"),
+    LUTETIUM("Lu"),
+    HAFNIUM("Hf"),
+    TANTALUM("Ta"),
+    TUNGSTEN("W"),
+    RHENIUM("Re"),
+    OSMIUM("Os"),
+    IRIDIUM("Ir"),
+    PLATINUM("Pt"),
+    GOLD("Ag"),
+    MERCURY("Hg"),
+    THALLIUM("Tl"),
+    LEAD("Pb"),
+    BISMUTH("Bi"),
+    POLONIUM("Po"),
+    ASTATINE("At"),
+    RADON("Rn"),
+    FRANCIUM("Fr"),
+    RADIUM("Ra"),
+    ACTINIUM("Ac"),
+    THORIUM("Th"),
+    PROTACTINIUM("Pa"),
+    URANIUM("U"),
+    NEPTUNIUM("Np"),
+    PLUTONIUM("Pu"),
+    AMERICIUM("Am"),
+    CURIUM("Cm"),
+    BERKELIUM("Bk"),
+    CALIFORNIUM("Cf"),
+    EINSTEINIUM("Es"),
+    FERMIUM("Fm"),
+    MENDELEVIUM("Md"),
+    NOBELIUM("No"),
+    LAWRENCIUM("Lr"),
+    RUTHERFORDIUM("Rf"),
+    DUBNIUM("Db"),
+    SEABORGIUM("Sg"),
+    BOHRIUM("Bh"),
+    HASSIUM("Hs"),
+    MEITNERIUM("Mt"),
+    DARMSTADTIUM("Ds"),
+    ROENTGENIUM("Rg"),
+    COPERNICIUM("Cn"),
+    NIHONIUM("Nh"),
+    FLEROVIUM("Fl"),
+    MOSCOVIUM("Mc"),
+    LIVERMORIUM("Lv"),
+    TENNESSINE("Ts"),
+    OGANESSON("Og");
+
+    public final String symbol;
+    public final String name;
+    public final int atomicNumber;
+
+    Elements(String symbol) {
+        this.symbol = symbol;
+        this.name = name().toLowerCase();
+        this.atomicNumber = ordinal();
+    }
+
+    @Override
+    public String getValue() {
+        return symbol;
+    }
+
+    @Override
+    public boolean requiresParentheses() {
+        return false;
+    }
+}

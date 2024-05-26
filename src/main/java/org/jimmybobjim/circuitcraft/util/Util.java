@@ -42,6 +42,20 @@ public class Util {
                 .replace('9', '₉');
     }
 
+    public static String intToSuperScript(int val) {
+        return String.valueOf(val)
+                .replace('0', '⁰')
+                .replace('1', '¹')
+                .replace('2', '²')
+                .replace('3', '³')
+                .replace('4', '⁴')
+                .replace('5', '⁵')
+                .replace('6', '⁶')
+                .replace('7', '⁷')
+                .replace('8', '⁸')
+                .replace('9', '⁹');
+    }
+
     public static BakedModel getBlockModel(BlockState blockState) {
         return Minecraft.getInstance().getBlockRenderer().getBlockModel(blockState);
     }

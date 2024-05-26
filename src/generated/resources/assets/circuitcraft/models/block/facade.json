@@ -1,5 +1,7 @@
 {
   "parent": "minecraft:block/cube",
   "facade": true,
-  "loader": "circuitcraft:wireharnessloader"
+  "loader": "circuitcraft:cableloader",
+  "sprites": "null",
+  "width": -1.0
 }

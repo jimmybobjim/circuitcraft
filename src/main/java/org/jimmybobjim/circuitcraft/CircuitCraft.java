@@ -1,20 +1,13 @@
 package org.jimmybobjim.circuitcraft;
 
 import com.mojang.logging.LogUtils;
-import net.minecraft.client.Minecraft;
 import net.minecraft.world.level.block.Blocks;
-import net.minecraftforge.api.distmarker.Dist;
-import net.minecraftforge.client.event.ModelEvent;
-import net.minecraftforge.client.event.RegisterColorHandlersEvent;
 import net.minecraftforge.common.MinecraftForge;
 import net.minecraftforge.event.BuildCreativeModeTabContentsEvent;
-import net.minecraftforge.event.server.ServerStartingEvent;
 import net.minecraftforge.eventbus.api.IEventBus;
-import net.minecraftforge.eventbus.api.SubscribeEvent;
 import net.minecraftforge.fml.ModLoadingContext;
 import net.minecraftforge.fml.common.Mod;
 import net.minecraftforge.fml.config.ModConfig;
-import net.minecraftforge.fml.event.lifecycle.FMLClientSetupEvent;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
@@ -22,8 +15,6 @@ import org.jimmybobjim.circuitcraft.creativeTabs.CCCreativeTabs;
 import org.jimmybobjim.circuitcraft.creativeTabs.CreativeTabs;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlockEntities;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlocks;
-import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.bakedModel.FacadeBlockColor;
-import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.bakedModel.WireHarnessModelLoader;
 import org.jimmybobjim.circuitcraft.materials.items.CCItems;
 import org.slf4j.Logger;
 
@@ -77,31 +68,5 @@ public class CircuitCraft {
         CreativeTabs.register(event);
     }
     // You can use SubscribeEvent and let the Event Bus discover methods to call
-    @SubscribeEvent
-    public void onServerStarting(ServerStartingEvent event) {
-        // Do something when the server starts
-        LOGGER.info("HELLO from server starting");
-    }
 
-    // You can use EventBusSubscriber to automatically register all static methods in the class annotated with @SubscribeEvent
-    @Mod.EventBusSubscriber(modid = MODID, bus = Mod.EventBusSubscriber.Bus.MOD, value = Dist.CLIENT)
-    public static class ClientModEvents {
-
-        @SubscribeEvent
-        public static void onClientSetup(FMLClientSetupEvent event) {
-            // Some client setup code
-            LOGGER.info("HELLO FROM CLIENT SETUP");
-            LOGGER.info("MINECRAFT NAME >> {}", Minecraft.getInstance().getUser().getName());
-        }
-
-        @SubscribeEvent
-        public static void modelInit(ModelEvent.RegisterGeometryLoaders event) {
-            WireHarnessModelLoader.register(event);
-        }
-
-        @SubscribeEvent
-        public static void registerBlockColor(RegisterColorHandlersEvent.Block event) {
-            event.register(new FacadeBlockColor(), CCBlocks.FACADE_BLOCK.get());
-        }
-    }
 }

@@ -1,5 +1,5 @@
 {
+  "block.circuitcraft.cable_block": "Cable",
   "block.circuitcraft.facade_block": "Facade",
-  "block.circuitcraft.wire_harness_block": "Wire Harness",
-  "item.circuitcraft.wire_copper_red_x1": "1x Red Copper Wire"
+  "tutorial.facade.is_mimicing": "Facade is mimicking %s"
 }

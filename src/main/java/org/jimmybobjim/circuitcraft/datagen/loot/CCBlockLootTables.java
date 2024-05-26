@@ -16,8 +16,8 @@ public class CCBlockLootTables extends BlockLootSubProvider {
 
     @Override
     protected void generate() {
-        this.dropSelf(CCBlocks.WIRE_HARNESS_BLOCK.get());
         this.dropSelf(CCBlocks.FACADE_BLOCK.get());
+        this.dropSelf(CCBlocks.CABLE_BLOCK.get());
     }
 
     @Override

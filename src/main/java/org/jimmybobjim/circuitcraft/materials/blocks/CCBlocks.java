@@ -7,14 +7,16 @@ import net.minecraft.world.item.ItemStack;
 import net.minecraft.world.item.TooltipFlag;
 import net.minecraft.world.level.Level;
 import net.minecraft.world.level.block.Block;
+import net.minecraft.world.level.block.Blocks;
+import net.minecraft.world.level.block.state.BlockBehaviour;
 import net.minecraftforge.eventbus.api.IEventBus;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.ForgeRegistries;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.Nullable;
 import org.jimmybobjim.circuitcraft.CircuitCraft;
-import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.facadeBlock.FacadeBlock;
-import org.jimmybobjim.circuitcraft.materials.blocks.custom.wireHarness.wireHarnessBlock.WireHarnessBlock;
+import org.jimmybobjim.circuitcraft.materials.blocks.custom.base.cable.cable.CableBlock;
+import org.jimmybobjim.circuitcraft.materials.blocks.custom.base.cable.facade.FacadeBlock;
 import org.jimmybobjim.circuitcraft.materials.items.CCItems;
 
 import javax.annotation.ParametersAreNonnullByDefault;
@@ -25,18 +27,16 @@ public class CCBlocks {
     public static final DeferredRegister<Block> BLOCKS = DeferredRegister.create(ForgeRegistries.BLOCKS, CircuitCraft.MODID);
 
     public static final RegistryObject<Block>
-            WIRE_HARNESS_BLOCK = registerBlockItem("wire_harness_block",
-                    () -> new WireHarnessBlock(CCBlockBehaviours.WIRE_HARNESS)),
-            FACADE_BLOCK = registerBlock("facade_block",
-                    () -> new FacadeBlock(CCBlockBehaviours.WIRE_HARNESS));
+            FACADE_BLOCK = registerBlock("facade_block", () -> new FacadeBlock(BlockBehaviour.Properties.copy(Blocks.STONE))),
+            CABLE_BLOCK = registerBlockWithItem("cable_block", () -> new CableBlock(BlockBehaviour.Properties.copy(Blocks.STONE), 4));
 
-    private static <T extends Block> RegistryObject<T> registerBlockItem(String name, Supplier<T> block) {
+    private static <T extends Block> RegistryObject<T> registerBlockWithItem(String name, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);                                //generate block
         CCItems.ITEMS.register(name, () -> new BlockItem(toReturn.get(), new Item.Properties())); //generate block-item
         return toReturn;
     }
 
-    private static <T extends Block> RegistryObject<T> registerBlockItemHoverText(String name, Component hoverText, Supplier<T> block) {
+    private static <T extends Block> RegistryObject<T> registerBlockWithItemHoverText(String name, Component hoverText, Supplier<T> block) {
         RegistryObject<T> toReturn = BLOCKS.register(name, block);
 
         CCItems.ITEMS.register(name, () -> new BlockItem(toReturn.get(), new Item.Properties()) {
@@ -52,21 +52,6 @@ public class CCBlocks {
         return toReturn;
     }
 
-    private static <T extends Block> RegistryObject<T> registerBlockItemMultiHoverText(String name, List<Component> hoverTexts, Supplier<T> block) {
-        RegistryObject<T> toReturn = BLOCKS.register(name, block);
-
-        CCItems.ITEMS.register(name, () -> new BlockItem(toReturn.get(), new Item.Properties()) {
-            @Override
-            @ParametersAreNonnullByDefault
-            public void appendHoverText(ItemStack pStack, @Nullable Level pLevel, List<Component> pTooltip, TooltipFlag pFlag) {
-                super.appendHoverText(pStack, pLevel, pTooltip, pFlag);
-
-                pTooltip.addAll(hoverTexts);
-            }
-        });
-
-        return toReturn;
-    }
     private static <T extends Block> RegistryObject<T> registerBlock(String name, Supplier<T> block) {
         return BLOCKS.register(name, block);
     }

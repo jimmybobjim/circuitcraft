@@ -19,7 +19,7 @@ public class CCItemModelProvider extends ItemModelProvider {
 
     @Override
     protected void registerModels() {
-        withExistingParent(CCBlocks.WIRE_HARNESS_BLOCK.getId().getPath(), modLoc("block/wire_harness"));
+        withExistingParent(CCBlocks.CABLE_BLOCK.getId().getPath(), modLoc("block/cable"));
         withExistingParent(CCBlocks.FACADE_BLOCK.getId().getPath(), modLoc("block/facade"));
     }
 

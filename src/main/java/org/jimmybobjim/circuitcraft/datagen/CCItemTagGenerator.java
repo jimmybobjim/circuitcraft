@@ -8,8 +8,6 @@ import net.minecraftforge.common.data.ExistingFileHelper;
 import org.jetbrains.annotations.NotNull;
 import org.jetbrains.annotations.Nullable;
 import org.jimmybobjim.circuitcraft.CircuitCraft;
-import org.jimmybobjim.circuitcraft.materials.items.CCItems;
-import org.jimmybobjim.circuitcraft.tags.CCTags;
 
 import java.util.concurrent.CompletableFuture;
 
@@ -20,9 +18,8 @@ public class CCItemTagGenerator extends ItemTagsProvider {
     }
 
     @Override
-    protected void addTags(HolderLookup.Provider pProvider) {
-        this.tag(CCTags.Items.WIRE)
-                .add(CCItems.WIRE_COPPER_RED_X1.get());
+    protected void addTags(HolderLookup.@NotNull Provider pProvider) {
+
     }
 
     @Override

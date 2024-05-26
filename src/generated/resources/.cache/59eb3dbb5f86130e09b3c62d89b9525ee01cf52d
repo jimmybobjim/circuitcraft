@@ -1,3 +1,3 @@
-// 1.20.1	2024-03-20T21:15:12.326323	Loot Tables
-4977ddb1ba3f73af9eeb94ae8e55709dc6f0a9ac data/circuitcraft/loot_tables/blocks/facade_block.json
-129c1608fc494825b03fee54a8dab51520c60735 data/circuitcraft/loot_tables/blocks/wire_harness_block.json
+// 1.20.1	2024-05-05T19:04:20.5341492	Loot Tables
+3bb50dd2a61f7ab562eccfc557534ba2d115846f data/circuitcraft/loot_tables/blocks/cable_block.json
+678f572b41b398e90ce28149dc197d7ff9cba085 data/circuitcraft/loot_tables/blocks/facade_block.json

@@ -1,5 +1,5 @@
-// 1.20.1	2024-03-20T21:15:12.3283258	Block States: circuitcraft
+// 1.20.1	2024-05-25T09:45:55.9907825	Block States: circuitcraft
+d0a98d5fa08256eb93cf8e5c12287ed2957a01d4 assets/circuitcraft/blockstates/cable_block.json
 0da5e3a39555da01966bbec75aca6cd2f19d9aa2 assets/circuitcraft/blockstates/facade_block.json
-eb0c50dc165a94723a527be29a9b1b4e48ed1d60 assets/circuitcraft/blockstates/wire_harness_block.json
-a9b58da03028ba5261c9ec821927c70b630693b3 assets/circuitcraft/models/block/facade.json
-f7f8dc01c267b5a363f85cf012836ae08e973990 assets/circuitcraft/models/block/wire_harness.json
+c386453d8dae85f514963274fc29d650bca4972a assets/circuitcraft/models/block/cable.json
+128b98531aa640f49de452c1bc84e3a97cdd9869 assets/circuitcraft/models/block/facade.json

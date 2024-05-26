@@ -21,7 +21,7 @@ public class CCBlockTagGenerator extends BlockTagsProvider {
     @Override
     protected void addTags(HolderLookup.@NotNull Provider pProvider) {
         tag(BlockTags.MINEABLE_WITH_PICKAXE)
-                .add(CCBlocks.WIRE_HARNESS_BLOCK.get())
+                .add(CCBlocks.CABLE_BLOCK.get())
                 .add(CCBlocks.FACADE_BLOCK.get());
     }
 

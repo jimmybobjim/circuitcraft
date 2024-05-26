@@ -1,41 +1,32 @@
 package org.jimmybobjim.circuitcraft.materials.blocks.custom.base;
 
 import net.minecraft.core.Direction;
+import net.minecraft.core.Vec3i;
 import net.minecraft.world.item.context.BlockPlaceContext;
 import net.minecraft.world.level.block.BaseEntityBlock;
 import net.minecraft.world.level.block.Block;
 import net.minecraft.world.level.block.state.BlockState;
 import net.minecraft.world.level.block.state.StateDefinition;
+import net.minecraft.world.level.block.state.properties.BooleanProperty;
 import net.minecraft.world.level.block.state.properties.DirectionProperty;
-import net.minecraft.world.level.block.state.properties.IntegerProperty;
 import org.jetbrains.annotations.Nullable;
 
 import javax.annotation.ParametersAreNonnullByDefault;
 import java.util.Arrays;
 
 public abstract class XYZRotatableBlockEntity extends BaseEntityBlock {
-    public static final IntegerProperty X_ROT = IntegerProperty.create("x_rot", 0, 3);
-    public static final IntegerProperty Y_ROT = IntegerProperty.create("y_rot", 0, 3);
-    public static final IntegerProperty Z_ROT = IntegerProperty.create("z_rot", 0, 3);
     public static final DirectionProperty ATTACHED_FACE = DirectionProperty.create("attached_face");
+    public static final BooleanProperty ROTATED = BooleanProperty.create("rotated");
 
     protected XYZRotatableBlockEntity(Properties pProperties) {
         super(pProperties);
     }
 
-    @Nullable
-    @Override
-    @ParametersAreNonnullByDefault
-    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
-        Direction attachedFace = pContext.getClickedFace().getOpposite();
+    public static Vec3i getRotationVect(BlockState pState) {
+        return getRotationVect(pState.getValue(ATTACHED_FACE), pState.getValue(ROTATED));
+    }
 
-        boolean rotated;
-        if (Arrays.asList(Direction.NORTH, Direction.SOUTH).contains(pContext.getHorizontalDirection())) {
-            rotated = Arrays.asList(Direction.EAST, Direction.WEST).contains(attachedFace);
-        } else {
-            rotated = !Arrays.asList(Direction.EAST, Direction.WEST).contains(attachedFace);
-        }
-
+    public static Vec3i getRotationVect(Direction attachedFace, boolean rotated) {
         int xRot = 0, yRot = 0, zRot = 0;
 
         switch (attachedFace) {
@@ -107,15 +98,29 @@ public abstract class XYZRotatableBlockEntity extends BaseEntityBlock {
             }
         }
 
+        return new Vec3i(xRot, yRot, zRot);
+    }
+
+    @Nullable
+    @Override
+    @ParametersAreNonnullByDefault
+    public BlockState getStateForPlacement(BlockPlaceContext pContext) {
+        Direction attachedFace = pContext.getClickedFace().getOpposite();
+
+        boolean rotated;
+        if (Arrays.asList(Direction.NORTH, Direction.SOUTH).contains(pContext.getHorizontalDirection())) {
+            rotated = Arrays.asList(Direction.EAST, Direction.WEST).contains(attachedFace);
+        } else {
+            rotated = !Arrays.asList(Direction.EAST, Direction.WEST).contains(attachedFace);
+        }
+
         return this.defaultBlockState()
-                .setValue(X_ROT, xRot)
-                .setValue(Y_ROT, yRot)
-                .setValue(Z_ROT, zRot)
-                .setValue(ATTACHED_FACE, attachedFace);
+                .setValue(ATTACHED_FACE, attachedFace)
+                .setValue(ROTATED, rotated);
     }
 
     @Override
     protected void createBlockStateDefinition(StateDefinition.Builder<Block, BlockState> pBuilder) {
-        pBuilder.add(X_ROT, Y_ROT, Z_ROT, ATTACHED_FACE);
+        pBuilder.add(ATTACHED_FACE, ROTATED);
     }
 }

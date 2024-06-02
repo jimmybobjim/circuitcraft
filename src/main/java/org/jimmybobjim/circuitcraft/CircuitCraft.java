@@ -15,6 +15,7 @@ import org.jimmybobjim.circuitcraft.creativeTabs.CCCreativeTabs;
 import org.jimmybobjim.circuitcraft.creativeTabs.CreativeTabs;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlockEntities;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlocks;
+import org.jimmybobjim.circuitcraft.materials.fluids.CCFluids;
 import org.jimmybobjim.circuitcraft.materials.items.CCItems;
 import org.slf4j.Logger;
 
@@ -39,6 +40,7 @@ public class CircuitCraft {
         CCBlocks.register(modEventBus);
         CCItems.register(modEventBus);
         CCCreativeTabs.register(modEventBus);
+        CCFluids.register(modEventBus);
 
         // Register ourselves for server and other game events we are interested in
         MinecraftForge.EVENT_BUS.register(this);

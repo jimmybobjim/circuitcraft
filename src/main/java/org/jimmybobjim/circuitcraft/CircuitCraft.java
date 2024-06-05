@@ -11,6 +11,7 @@ import net.minecraftforge.fml.config.ModConfig;
 import net.minecraftforge.fml.event.lifecycle.FMLCommonSetupEvent;
 import net.minecraftforge.fml.javafmlmod.FMLJavaModLoadingContext;
 import net.minecraftforge.registries.ForgeRegistries;
+import org.jimmybobjim.circuitcraft.api.materialgen.Registries;
 import org.jimmybobjim.circuitcraft.creativeTabs.CCCreativeTabs;
 import org.jimmybobjim.circuitcraft.creativeTabs.CreativeTabs;
 import org.jimmybobjim.circuitcraft.materials.blocks.CCBlockEntities;
@@ -18,6 +19,8 @@ import org.jimmybobjim.circuitcraft.materials.blocks.CCBlocks;
 import org.jimmybobjim.circuitcraft.materials.fluids.CCFluids;
 import org.jimmybobjim.circuitcraft.materials.items.CCItems;
 import org.slf4j.Logger;
+
+import java.util.function.Supplier;
 
 // The value here should match an entry in the META-INF/mods.toml file
 @Mod(CircuitCraft.MODID)
@@ -28,6 +31,14 @@ public class CircuitCraft {
 
     // Directly reference a slf4j logger
     public static final Logger LOGGER = LogUtils.getLogger();
+
+    public static final Supplier<Registries> REGISTRIES = () -> new Registries(
+            CCItems.ITEMS,
+            CCBlocks.BLOCKS,
+            CCBlockEntities.BLOCK_ENTITIES,
+            CCFluids.FLUIDS,
+            CCFluids.FLUID_TYPES
+    );
 
     public CircuitCraft() {
         IEventBus modEventBus = FMLJavaModLoadingContext.get().getModEventBus();

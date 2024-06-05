@@ -20,11 +20,11 @@ import net.minecraftforge.fluids.ForgeFlowingFluid;
 import net.minecraftforge.registries.DeferredRegister;
 import net.minecraftforge.registries.RegistryObject;
 import org.jetbrains.annotations.NotNull;
+import org.jimmybobjim.circuitcraft.api.materialgen.Registries;
 import org.joml.Vector3f;
 
 import java.awt.*;
 import java.util.function.Consumer;
-import java.util.function.Supplier;
 
 public class FluidHelper {
     private static final ResourceLocation
@@ -40,13 +40,12 @@ public class FluidHelper {
     private RegistryObject<FluidType> fluidType;
     private RegistryObject<ForgeFlowingFluid.Source> source;
     private RegistryObject<ForgeFlowingFluid.Flowing> flowing;
-    private Supplier<BucketItem> bucket;
-    private Supplier<LiquidBlock> block;
+    private RegistryObject<BucketItem> bucket;
+    private RegistryObject<LiquidBlock> block;
     private int slopeFindDistance = 4;
     private int levelDecreasePerBlock = 1;
     private float explosionResistance = 1;
     private int tickRate = 5;
-    private boolean hasBucket = true;
     private FluidType.Properties fluidProperties = FluidType.Properties.create();
     private BlockBehaviour.Properties blockProperties = BlockBehaviour.Properties.copy(Blocks.WATER).noLootTable();
     private Item.Properties itemProperties = new Item.Properties().craftRemainder(Items.BUCKET).stacksTo(1);
@@ -99,12 +98,6 @@ public class FluidHelper {
 
     public FluidHelper itemProperties(Item.Properties itemProperties) {
         this.itemProperties = itemProperties;
-
-        return this;
-    }
-
-    public FluidHelper noBucket() {
-        hasBucket = false;
 
         return this;
     }
@@ -163,16 +156,18 @@ public class FluidHelper {
 
         block = blockRegister.register(name + "_block", () -> new LiquidBlock(source, blockProperties));
 
+        bucket = itemRegister.register(name + "_bucket", () -> new BucketItem(source, itemProperties));
+
         forgeProperties = new ForgeFlowingFluid.Properties(fluidType, source, flowing)
                 .slopeFindDistance(slopeFindDistance)
                 .levelDecreasePerBlock(levelDecreasePerBlock)
                 .explosionResistance(explosionResistance)
                 .tickRate(tickRate)
-                .block(block);
+                .block(block)
+                .bucket(bucket);
+    }
 
-        if (hasBucket) {
-            bucket = itemRegister.register(name + "_bucket", () -> new BucketItem(source, itemProperties));
-            forgeProperties.bucket(bucket);
-        }
+    public void build(Registries registries) {
+        build(registries.fluidRegister(), registries.fluidTypeRegister(), registries.itemRegister(), registries.blockRegister());
     }
 }
